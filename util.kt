@@ -19,6 +19,11 @@ fun Int.pow(n: Int): Int {
     return this.toDouble().pow(n).toInt()
 }
 
+fun gcd(a: Int, b: Int): Int {
+    val remainder = a % b
+    return if (remainder == 0) b else gcd(b, remainder)
+}
+
 
 fun c(n: Long, k: Long): Long {
     return factorial(n) / (factorial(k) * factorial(n - k))
@@ -30,6 +35,13 @@ fun factorial(n: Long): Long {
         result *= i
     }
     return result
+}
+
+
+fun String.replaceLast(oldValue: String, newValue: String): String {
+    if (!contains(oldValue)) return this
+
+    return substringBeforeLast(oldValue) + newValue + substringAfterLast(oldValue)
 }
 
 
@@ -67,12 +79,7 @@ fun <T> zip(vararg lists: List<T>): List<List<T>> {
  */
 fun <T, V> zip(vararg lists: List<T>, transform: (List<T>) -> V): List<V> {
     val minSize = lists.minOfOrNull(List<T>::size) ?: return emptyList()
-    val list = ArrayList<V>(minSize)
-
     val iterators = lists.map { it.iterator() }
-    repeat(minSize) {
-        list.add(transform(iterators.map { it.next() }))
-    }
 
-    return list
+    return List(minSize) { transform(iterators.map { it.next() }) }
 }
